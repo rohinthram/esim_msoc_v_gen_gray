@@ -1,0 +1,81 @@
+* r:\esim_simulations\volt_gen_gray\volt_gen_gray.cir
+
+.include avsd_opamp.sub
+.include "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130_fd_pr__model__linear.model.spice"
+.include "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130_fd_pr__model__pnp.model.spice"
+.include "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130_fd_pr__model__inductors.model.spice"
+.include "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130_fd_pr__model__diode_pw2nd_11v0.model.spice"
+.lib "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130.lib.spice" tt
+.include "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130_fd_pr__model__r+c.model.spice"
+.include "C:\FOSSEE\eSim\library\sky130_fd_pr\models\sky130_fd_pr__model__diode_pd2nw_11v0.model.spice"
+* u5  clk net-_u2-pad8_ net-_u5-pad3_ gray_bin_5bit_fsm
+* u6  net-_u5-pad3_ clk out4 out3 out2 out1 out0 sipo_5bit
+vin1  in0 gnd pulse(5 5 1m 1m 1m 10 10)
+vin2  in1 gnd pulse(5 5 1m 1m 1m 10 10)
+vin3  in2 gnd pulse(5 5 1m 1m 1m 10 10)
+vin4  in3 gnd pulse(5 5 1m 1m 1m 10 10)
+vin5  in4 gnd pulse(5 5 1m 1m 1m 10 10)
+vclk1  net-_u4-pad6_ gnd pulse(0 5 1m 1m 1m 0.5 1)
+vshift1  shift gnd pulse(0 5 1m 1m 1m 10 10)
+* u12  out4 plot_v1
+* u14  out3 plot_v1
+* u15  out2 plot_v1
+* u16  out1 plot_v1
+* u17  out0 plot_v1
+* u7  in0 plot_v1
+* u3  clk plot_v1
+* u9  in1 plot_v1
+* u10  in2 plot_v1
+* u11  in3 plot_v1
+* u13  in4 plot_v1
+* u4  in4 in3 in2 in1 in0 net-_u4-pad6_ shift net-_u2-pad1_ net-_u2-pad2_ net-_u2-pad3_ net-_u2-pad4_ net-_u2-pad5_ clk net-_u2-pad7_ adc_bridge_7
+* u2  net-_u2-pad1_ net-_u2-pad2_ net-_u2-pad3_ net-_u2-pad4_ net-_u2-pad5_ clk net-_u2-pad7_ net-_u2-pad8_ piso_5bit
+* u1  shift plot_v1
+* s c m o d e
+x1 vdd vss gnd net-_sc1-pad1_ analog gnd avsd_opamp
+xsc5 net-_sc1-pad1_ net-_sc5-pad2_ gnd sky130_fd_pr__res_generic_pd l=100 w=100
+xsc4 net-_sc1-pad1_ net-_sc4-pad2_ gnd sky130_fd_pr__res_generic_pd l=100 w=100
+xsc3 net-_sc1-pad1_ net-_sc3-pad2_ gnd sky130_fd_pr__res_generic_pd l=100 w=100
+xsc2 net-_sc1-pad1_ net-_sc2-pad2_ gnd sky130_fd_pr__res_generic_pd l=100 w=100
+xsc1 net-_sc1-pad1_ net-_sc1-pad2_ gnd sky130_fd_pr__res_generic_pd l=100 w=100
+* u8  analog plot_v1
+v1 vdd gnd  dc 1
+v2 gnd vss  dc 1
+* u18  out0 out1 out2 out3 out4 net-_sc5-pad2_ net-_sc4-pad2_ net-_sc3-pad2_ net-_sc2-pad2_ net-_sc1-pad2_ dac_bridge_5
+a1 [clk ] [net-_u2-pad8_ ] [net-_u5-pad3_ ] u5
+a2 [net-_u5-pad3_ ] [clk ] [out4 out3 out2 out1 out0 ] u6
+a3 [in4 in3 in2 in1 in0 net-_u4-pad6_ shift ] [net-_u2-pad1_ net-_u2-pad2_ net-_u2-pad3_ net-_u2-pad4_ net-_u2-pad5_ clk net-_u2-pad7_ ] u4
+a4 [net-_u2-pad1_ net-_u2-pad2_ net-_u2-pad3_ net-_u2-pad4_ net-_u2-pad5_ ] [clk ] [net-_u2-pad7_ ] [net-_u2-pad8_ ] u2
+a5 [out0 out1 out2 out3 out4 ] [net-_sc5-pad2_ net-_sc4-pad2_ net-_sc3-pad2_ net-_sc2-pad2_ net-_sc1-pad2_ ] u18
+* Schematic Name:                             gray_bin_5bit_fsm, NgSpice Name: gray_bin_5bit_fsm
+.model u5 gray_bin_5bit_fsm(rise_delay=1.0e-9 fall_delay=1.0e-9 input_load=1.0e-12 instance_id=1 ) 
+* Schematic Name:                             sipo_5bit, NgSpice Name: sipo_5bit
+.model u6 sipo_5bit(rise_delay=1.0e-9 fall_delay=1.0e-9 input_load=1.0e-12 instance_id=1 ) 
+* Schematic Name:                             adc_bridge_7, NgSpice Name: adc_bridge
+.model u4 adc_bridge(in_low=1.0 in_high=2.0 rise_delay=1.0e-9 fall_delay=1.0e-9 ) 
+* Schematic Name:                             piso_5bit, NgSpice Name: piso_5bit
+.model u2 piso_5bit(rise_delay=1.0e-9 fall_delay=1.0e-9 input_load=1.0e-12 instance_id=1 ) 
+* Schematic Name:                             dac_bridge_5, NgSpice Name: dac_bridge
+.model u18 dac_bridge(out_low=0.0 out_high=5.0 out_undef=0.5 input_load=1.0e-12 t_rise=1.0e-9 t_fall=1.0e-9 ) 
+.tran 1e-03 20e-00 0e-00
+
+* Control Statements 
+.control
+run
+print allv > plot_data_v.txt
+print alli > plot_data_i.txt
+plot v(out4)
+plot v(out3)
+plot v(out2)
+plot v(out1)
+plot v(out0)
+plot v(in0)
+plot v(clk)
+plot v(in1)
+plot v(in2)
+plot v(in3)
+plot v(in4)
+plot v(shift)
+plot v(analog)
+.endc
+.end
